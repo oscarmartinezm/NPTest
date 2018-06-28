@@ -1,0 +1,71 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if meal.id %}
+                                    <h3 style="margin: 10px 0;">Edit File</h3>
+                                {% else %}
+                                    <h3 cstyle="margin: 10px 0;">Create new File or Directory</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form method="POST" action="./index.php?route=/filesystem/save/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
+                            {% if meal.id %}
+                                <input name="_method" type="hidden" value="PATCH">
+                            {% else %}
+                                <input name="_method" type="hidden" value="POST">
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label for="name">Name <span class="required">*</span></label>
+                                        <input type="text" name="name" placeholder="Name" data-value="{{ meal.name }}" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label for="type">Type <span class="required">*</span></label>
+                                        <select name="type" data-value="{{ meal.status }}" class="form-control selectpicker show-tick">
+                                            <option value="File">File</option>
+                                            <option value="Directory">Directory</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label for="parent">Parent <span class="required">*</span></label>
+                                        <select name="parent" data-value="{{ meal.ota_meal_plan_id }}" class="form-control selectpicker show-tick">
+                                            <option value="0">Root</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <input class="btn btn-primary  pull-right" type="submit" value="Save"/>
+                                    <a href="/meals/" class="btn btn-default btn-md pull-right" style="margin-right: 10px;">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script></script>
+{% endblock %}
