@@ -50,11 +50,15 @@ class FileSystem extends ModelBase {
                 ], $id);
     }
 
-    public function findByName($name) {
+    public static function find($id) {
+        return parent::_find(self::$TABLE, ['id' => $id]);
+    }
+    
+    public static function findByName($name) {
         return parent::find(self::$TABLE, ['name' => $name]);
     }
 
-    public function findByType($type) {
+    public static function findByType($type) {
         $dbResult = parent::find(self::$TABLE, ['type' => $type], ['parent', 'level', 'name']);
         $result = array();
         foreach ($dbResult as $item) {
@@ -63,63 +67,55 @@ class FileSystem extends ModelBase {
         return $result;
     }
 
-    public function getTree($includeFiles = true, $asArray = false) {
+    public static function getTree($includeFiles = true, $asArray = false) {
         $filters = !($includeFiles) ? ['type' => self::TYPE_DIRECTORY] : [];
-        $data = parent::find(self::$TABLE, $filters, ['parent', 'level', 'name']);
+        $data = parent::_find(self::$TABLE, $filters, ['parent', 'level', 'name']);
         $parents = array();
         foreach ($data as $item) {
             $parents[$item['parent']][] = $item;
         }
         if ($asArray) {
-            $tree = $this->createBranchArr($parents, $parents[0]);
+            $tree = self::createBranchArr($parents, $parents[0]);
         } else {
-            $tree = $this->createBranchObj($parents, $parents[0]);
+            $tree = self::createBranchObj($parents, $parents[0]);
         }
         return $tree;
     }
 
-    public function getFlatStructure($includeFiles = true) {
-        $tree = $this->getTree($includeFiles, true);
-        return $this->treeToFlat($tree);
+    public static function getFlat($includeFiles = true) {
+        $tree = self::getTree($includeFiles, true);
+        return self::treeToFlat($tree);
     }
 
-    private function createTree($flat, $root = 0) {
-        $parents = array();
-        foreach ($flat as $a) {
-            $parents[$a['parent']][] = $a;
-        }
-        return $this->createBranch($parents, $parents[$root]);
-    }
-
-    private function createBranchArr(&$parents, $children) {
+    private static function createBranchArr(&$parents, $children) {
         $tree = array();
         foreach ($children as $child) {
             if (isset($parents[$child['id']])) {
-                $child['children'] = $this->createBranchArr($parents, $parents[$child['id']]);
+                $child['children'] = self::createBranchArr($parents, $parents[$child['id']]);
             }
             $tree[] = $child;
         }
         return $tree;
     }
 
-    private function createBranchObj(&$parents, $children) {
+    private static function createBranchObj(&$parents, $children) {
         $tree = array();
         foreach ($children as $child) {
             $childObj = self::createFromDB($child);
             if (isset($parents[$child['id']])) {
-                $childObj->children = $this->createBranchObj($parents, $parents[$child['id']]);
+                $childObj->children = self::createBranchObj($parents, $parents[$child['id']]);
             }
             $tree[] = $childObj;
         }
         return $tree;
     }
 
-    private function treeToFlat($tree, &$count = 0) {
+    private static function treeToFlat($tree, &$count = 0) {
         $result = array();
         foreach ($tree as $row) {
             $result[$count] = self::createFromDB($row);
             if (isset($row['children'])) {
-                $result = array_merge($result, $this->treeToFlat($row['children'], $count));
+                $result = array_merge($result, self::treeToFlat($row['children'], $count));
             }
             ++$count;
         }
@@ -128,10 +124,10 @@ class FileSystem extends ModelBase {
 
     public function validate() {
         $notValidFields = array();
-        if (!filter_var($this->name, FILTER_VALIDATE_REGEXP, $this->getRegexFilter('^[a-zA-Z0-9\.-_ ]{1,255}$'))) {
+        if (!filter_var($this->name, FILTER_VALIDATE_REGEXP, self::getRegexFilter('^[a-zA-Z0-9\.-_ ]{1,255}$'))) {
             $notValidFields[] = "name => {$this->name}";
         }
-        if (!filter_var($this->type, FILTER_VALIDATE_REGEXP, $this->getRegexFilter('^(File|Directory)$'))) {
+        if (!filter_var($this->type, FILTER_VALIDATE_REGEXP, self::getRegexFilter('^(File|Directory)$'))) {
             $notValidFields[] = "type => {$this->type}";
         }
         if (!filter_var($this->parent, FILTER_VALIDATE_INT) === 0 && !filter_var($this->parent, FILTER_VALIDATE_INT)) {

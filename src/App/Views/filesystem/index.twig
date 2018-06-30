@@ -4,6 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                {% if _error_ %}
+                <div class="alert alert-danger fade in alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    {{ _error_ }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -36,7 +46,7 @@
                                         <td>{{ item.type }}</td>
                                         <td>
                                             <p data-placement="top" data-toggle="tooltip" title="" data-original-title="Edit">
-                                                <a href="{!! route('hotel.edit', $hotel->id) !!}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                <a href="index.php?route=/filesystem/update/{{ item.id }}/" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
                                             </p>
                                         </td>
                                         <td>

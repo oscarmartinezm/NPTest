@@ -21,7 +21,7 @@ class FileSystemController extends ControllerBase {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $filesystem = FileSystem::get()->getFlatStructure();
+        $filesystem = FileSystem::getFlat(true);
         $this->loadView('filesystem/index', ['filesystem' => $filesystem, '_error_' => $this->error]);
     }
 
@@ -32,7 +32,7 @@ class FileSystemController extends ControllerBase {
      */
     public function create() {
         try {
-            $directories = FileSystem::get()->getFlatStructure(false);
+            $directories = FileSystem::getFlat(false);
             $this->loadView('filesystem/form', ['directories' => $directories, '_error_' => $this->error]);
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/', $exc->getMessage());
@@ -70,17 +70,27 @@ class FileSystemController extends ControllerBase {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        
+        try {
+            $filesystemItem = FileSystem::find($id);
+            $this->loadView('filesystem/form', ['item' => $filesystemItem, '_error_' => $this->error]);
+        } catch (\Exception $exc) {
+            $this->redirect('/filesystem/', $exc->getMessage());
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
      */
     public function edit($id) {
-        
+        try {
+            $filesystemItem = FileSystem::find($id);
+            $directories = FileSystem::getFlat(false);
+            $this->loadView('filesystem/form', ['directories' => $directories, 'item' => $filesystemItem, '_error_' => $this->error]);
+        } catch (\Exception $exc) {
+            $this->redirect('/filesystem/', $exc->getMessage());
+        }
     }
 
     /**

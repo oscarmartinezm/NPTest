@@ -6,14 +6,18 @@ use App\Controllers\FileSystemController;
 
 $route = filter_input(INPUT_GET, 'route');
 
-switch ($route) {
-    case '/filesystem/':
+switch (true) {
+    case $route == '/filesystem/':
         FileSystemController::get()->index();
         break;
-    case '/filesystem/add/':
+    case $route == '/filesystem/add/':
         FileSystemController::get()->create();
         break;
-    case '/filesystem/save/':
+    case preg_match('/^\/filesystem\/update\/[0-9]+\/$/', $route):
+        $id = explode('/', $route)[3];
+        FileSystemController::get()->edit($id);
+        break;
+    case $route == '/filesystem/save/':
         $method = filter_input(INPUT_POST, '_method');
         if ($method === 'POST') {
             FileSystemController::get()->store();

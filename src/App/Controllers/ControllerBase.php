@@ -16,6 +16,7 @@ class ControllerBase {
 
     protected $twig;
     protected $error = null;
+    protected $success = null;
 
     public function __construct() {
         if (isset($_SESSION['__error__'])) {
