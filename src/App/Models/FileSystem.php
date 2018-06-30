@@ -23,6 +23,12 @@ class FileSystem extends ModelBase {
 
     public function __construct() {
         $this->id = null;
+        $this->name = null;
+        $this->type = null;
+        $this->parent = null;
+        $this->level = null;
+        $this->level_id = null;
+        $this->level_name = null;
         parent::__construct();
     }
 
@@ -33,11 +39,12 @@ class FileSystem extends ModelBase {
         $filesystem->type = $dbData['type'];
         $filesystem->parent = $dbData['parent'];
         $filesystem->level = (int) $dbData['level'];
-        $filesystem->level_name = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $dbData['level']) . $dbData['name'];
+        $filesystem->level_id = $filesystem->parent . '-' . ($filesystem->level - 1);
+        $filesystem->level_name = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $filesystem->level) . $filesystem->name;
         return $filesystem;
     }
 
-    public function save($id = null) {
+    public function save() {
         $validation = $this->validate();
         if ($validation !== true) {
             throw new \Exception('Some field values are not valid: ' . join(', ', $validation));
@@ -47,13 +54,17 @@ class FileSystem extends ModelBase {
             'type' => $this->type,
             'parent' => $this->parent,
             'level' => $this->level
-                ], $id);
+                ], $this->id);
     }
 
     public static function find($id) {
-        return parent::_find(self::$TABLE, ['id' => $id]);
+        $dbData = parent::_find(self::$TABLE, ['id' => $id]);
+        if (count($dbData) < 1) {
+            return null;
+        }
+        return self::createFromDB($dbData[0]);
     }
-    
+
     public static function findByName($name) {
         return parent::find(self::$TABLE, ['name' => $name]);
     }
@@ -70,6 +81,9 @@ class FileSystem extends ModelBase {
     public static function getTree($includeFiles = true, $asArray = false) {
         $filters = !($includeFiles) ? ['type' => self::TYPE_DIRECTORY] : [];
         $data = parent::_find(self::$TABLE, $filters, ['parent', 'level', 'name']);
+        if (empty($data)) {
+            return array();
+        }
         $parents = array();
         foreach ($data as $item) {
             $parents[$item['parent']][] = $item;
@@ -133,7 +147,7 @@ class FileSystem extends ModelBase {
         if (!filter_var($this->parent, FILTER_VALIDATE_INT) === 0 && !filter_var($this->parent, FILTER_VALIDATE_INT)) {
             $notValidFields[] = "parent => {$this->parent}";
         }
-        if (!filter_var($this->level, FILTER_VALIDATE_INT) === 0 && !filter_var($this->level, FILTER_VALIDATE_INT)){
+        if (!filter_var($this->level, FILTER_VALIDATE_INT) === 0 && !filter_var($this->level, FILTER_VALIDATE_INT)) {
             $notValidFields[] = "level => {$this->level}";
         }
         return (empty($notValidFields) ? true : $notValidFields);

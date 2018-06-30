@@ -5,10 +5,10 @@
         <div class="row">
             <div class="col-md-12">
                 {% if _error_ %}
-                <div class="alert alert-danger fade in alert-dismissible">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                    {{ _error_  }}
-                </div>
+                    <div class="alert alert-danger fade in alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                        {{ _error_  }}
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -28,8 +28,9 @@
                     </div>
                     <div class="panel-body">
                         <form method="POST" action="index.php?route=/filesystem/save/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
-                            {% if meal.id %}
+                            {% if item.id %}
                                 <input name="_method" type="hidden" value="PATCH">
+                                <input type="hidden" name="id" value="{{ item.id }}">
                             {% else %}
                                 <input name="_method" type="hidden" value="POST">
                             {% endif %}
@@ -37,7 +38,7 @@
                                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                                     <div class="form-group">
                                         <label for="name">Name <span class="required">*</span></label>
-                                        <input type="text" name="name" placeholder="Name" data-value="{{ meal.name }}" class="form-control" />
+                                        <input type="text" name="name" placeholder="Name" data-value="{{ item.name }}" class="form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +46,7 @@
                                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                                     <div class="form-group">
                                         <label for="type">Type <span class="required">*</span></label>
-                                        <select name="type" data-value="{{ meal.status }}" class="form-control selectpicker show-tick">
+                                        <select name="type" data-value="{{ item.type }}" class="form-control selectpicker show-tick">
                                             <option value="Directory">Directory</option>
                                             <option value="File">File</option>
                                         </select>
@@ -56,7 +57,7 @@
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="form-group">
                                         <label for="parent">Parent <span class="required">*</span></label>
-                                        <select name="parent" data-value="{{ meal.ota_meal_plan_id }}" class="form-control selectpicker show-tick" data-live-search="true">
+                                        <select name="parent" data-value="{{ item.level_id }}" class="form-control selectpicker show-tick" data-live-search="true">
                                             <option value="0-0">/</option>
                                             {% for directory in directories %}
                                                 <option value="{{ directory.id }}-{{ directory.level }}">{{ directory.level_name|raw }}</option>
@@ -80,5 +81,19 @@
 {% endblock %}
 
 {% block scripts %}
-    <script></script>
+    <script>
+        $('form [data-value]').each(function () {
+            console.log(this);
+            var ele = $(this);
+            if (ele.is(':checkbox') || ele.is(':radio')) {
+                if (ele.val() == ele.attr('data-value')) {
+                    ele.prop('checked', true);
+                } else {
+                    ele.prop('checked', false);
+                }
+            } else {
+                ele.val(ele.attr('data-value'));
+            }
+        });
+    </script>
 {% endblock %}

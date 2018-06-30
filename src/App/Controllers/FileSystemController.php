@@ -71,8 +71,8 @@ class FileSystemController extends ControllerBase {
      */
     public function show($id) {
         try {
-            $filesystemItem = FileSystem::find($id);
-            $this->loadView('filesystem/form', ['item' => $filesystemItem, '_error_' => $this->error]);
+            $model = FileSystem::find($id);
+            $this->loadView('filesystem/form', ['item' => $model, '_error_' => $this->error]);
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/', $exc->getMessage());
         }
@@ -85,9 +85,9 @@ class FileSystemController extends ControllerBase {
      */
     public function edit($id) {
         try {
-            $filesystemItem = FileSystem::find($id);
+            $model = FileSystem::find($id);
             $directories = FileSystem::getFlat(false);
-            $this->loadView('filesystem/form', ['directories' => $directories, 'item' => $filesystemItem, '_error_' => $this->error]);
+            $this->loadView('filesystem/form', ['directories' => $directories, 'item' => $model, '_error_' => $this->error]);
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/', $exc->getMessage());
         }
@@ -96,12 +96,24 @@ class FileSystemController extends ControllerBase {
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(HotelForm $request, $id) {
-        
+    public function update($id) {
+        try {
+            $model = FileSystem::find($id);
+            $model->name = filter_input(INPUT_POST, 'name');
+            $model->type = filter_input(INPUT_POST, 'type');
+            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]\-[0-9]$/")));
+            if ($parent) {
+                $parentSplit = explode('-', $parent);
+                $model->parent = $parentSplit[0];
+                $model->level = $parentSplit[1] + 1;
+            }
+            $model->save();
+            $this->redirect('/filesystem/');
+        } catch (\Exception $exc) {
+            $this->redirect('/filesystem/add/', $exc->getMessage());
+        }
     }
 
     /**

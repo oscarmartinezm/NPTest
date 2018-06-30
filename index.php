@@ -22,7 +22,8 @@ switch (true) {
         if ($method === 'POST') {
             FileSystemController::get()->store();
         } elseif ($method === 'PATCH') {
-            FileSystemController::get()->update();
+            $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+            FileSystemController::get()->update($id);
         }
         break;
     default:

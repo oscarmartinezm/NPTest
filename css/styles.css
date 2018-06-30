@@ -188,3 +188,7 @@ table.result-list tr td {
     width: 100px;
     text-align: center;
 }
+
+span.required {
+    color: red;
+}
