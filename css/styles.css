@@ -167,3 +167,24 @@ table.result-list tr td {
     vertical-align: middle;
 }
 /* END LIST PAGES SECTION */
+
+#filesystem-table tr td:nth-child(1){
+    width: 50px;
+}
+
+#filesystem-table tr td:nth-child(2){
+}
+
+#filesystem-table tr td:nth-child(3){
+    width: 100px;
+}
+
+#filesystem-table tr td:nth-child(4), #filesystem-table tr th:nth-child(4){
+    width: 100px;
+    text-align: center;
+}
+
+#filesystem-table tr td:nth-child(5), #filesystem-table tr th:nth-child(5){
+    width: 100px;
+    text-align: center;
+}

@@ -17,6 +17,8 @@ class DataBase {
     private static $password;
     private static $schema;
     private static $server;
+    
+    private static $singleton;
 
     /**
      * Creates a new database instance
@@ -369,6 +371,14 @@ class DataBase {
         }
         return $message;
     }
+    
+    public static function get($user = null, $password = null, $schema = null, $server = '127.0.0.1'){
+        if(is_null(self::$singleton)){
+            self::$singleton = new DataBase();
+        }
+        return self::$singleton;
+    }
+    
 
 }
 

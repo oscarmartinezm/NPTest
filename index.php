@@ -8,26 +8,21 @@ $route = filter_input(INPUT_GET, 'route');
 
 switch ($route) {
     case '/filesystem/':
-        $controller = new FileSystemController();
-        $controller->index();
+        FileSystemController::get()->index();
         break;
     case '/filesystem/add/':
-        $controller = new FileSystemController();
-        $controller->create();
+        FileSystemController::get()->create();
         break;
     case '/filesystem/save/':
-        $controller = new FileSystemController();
         $method = filter_input(INPUT_POST, '_method');
         if ($method === 'POST') {
-            $controller->store();
+            FileSystemController::get()->store();
         } elseif ($method === 'PATCH') {
-            $controller->update();
+            FileSystemController::get()->update();
         }
-        $controller->create();
         break;
     default:
-        $controller = new FileSystemController();
-        $controller->index();
+        FileSystemController::get()->index();
         break;
 }
 

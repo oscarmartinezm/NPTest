@@ -8,34 +8,32 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-10">
-                                <h3 style="margin: 10px 0;">Hotel set-up</h3>
+                                <h3 style="margin: 10px 0;">Filesystem</h3>
                             </div>
                             <div class="col-md-2" >
-                                <a href="/hotels/create/" class="btn btn-primary btn-md pull-right" style="margin: 10px 0;">Add Hotel</a>
+                                <a href="index.php?route=/filesystem/add/" class="btn btn-primary btn-md pull-right" style="margin: 10px 0;">Add new File or Directory</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="panel-body">
-                        <p>The following is the list of hotels for  {!!  Session::get('Hotel.name') !!}, click on edit to view the selected hotel</p>
                         <div class="table-responsive">
-                            <table class="table table-bordred table-striped">
+                            <table id="filesystem-table" class="table table-bordred table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Rank</th>
+                                        <th>Index</th>
                                         <th>Name</th>
-                                        <th>Status</th>
+                                        <th>Type</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for item in filesystem %}
                                     <tr>
-                                        <td>Titulo</td>
-                                        <td>
-                                            <a href="{!! route('hotel.show', $hotel->id) !!}">Nombre</a>
-                                        </td>
-                                        <td>Satus</td>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ item.level_name|raw }}</td>
+                                        <td>{{ item.type }}</td>
                                         <td>
                                             <p data-placement="top" data-toggle="tooltip" title="" data-original-title="Edit">
                                                 <a href="{!! route('hotel.edit', $hotel->id) !!}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -49,6 +47,7 @@
                                             </p>
                                         </td>
                                     </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -57,4 +56,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function(){
+            Helpers.dataTable('#filesystem-table', [-1, -2], false); 
+        });
+    </script>
 {% endblock %}

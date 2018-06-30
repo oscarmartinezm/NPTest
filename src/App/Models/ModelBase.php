@@ -14,6 +14,7 @@ class ModelBase {
     protected $db;
 
     protected function __construct() {
+        //$this->db = DataBase::get(DB_USER, DB_PASS, DB_SCHEMA, DB_HOST);
         $this->db = new DataBase(DB_USER, DB_PASS, DB_SCHEMA, DB_HOST);
     }
 
@@ -43,15 +44,21 @@ class ModelBase {
         $this->db->execute($insertSQL, array_merge($values, $valuesFilters));
     }
 
-    protected function find($table, $filters) {
+    protected function find($table, $filters, $orderBy = array('id')) {
         $valuesFilters = array_values($filters);
-        $selectSQL = $this->createSelect($table, $filters);
+        $selectSQL = $this->createSelect($table, array_keys($filters), $orderBy);
         return $this->db->query($selectSQL, $valuesFilters);
     }
 
-    private function createSelect($table, $filters) {
-        $filtersStr = rtrim(join(' AND , ', $filters));
-        $sql = "SELECT * FROM $table WHERE $filtersStr";
+    private function createSelect($table, $filtersColumns, $orderBy) {
+        if(empty($filtersColumns)){
+            $orderByStr = join(', ', $orderBy);
+            $sql = "SELECT * FROM $table ORDER BY $orderByStr;";
+        } else {
+            $filtersStr = join(' = ? AND ', $filtersColumns) . ' = ?';
+            $orderByStr = join(', ', $orderBy);
+            $sql = "SELECT * FROM $table WHERE $filtersStr ORDER BY $orderByStr;";
+        }
         return $sql;
     }
 
@@ -62,15 +69,19 @@ class ModelBase {
         return $sql;
     }
 
-    private function createUpdate($table, $columns, $filters) {
-        $columnsStr = rtrim(join(' = ? , ', $columns));
-        $filtersStr = rtrim(join(' AND , ', $filters));
+    private function createUpdate($table, $columns, $filtersColumns) {
+        $columnsStr = join(' = ? , ', $columns) . "{} = ?";
+        $filtersStr = join(' = ? AND ', $filtersColumns) . ' = ?';
         $sql = "UPDATE $table SET $columnsStr WHERE $filtersStr;";
         return $sql;
     }
 
     protected function getRegexFilter($regex) {
         return array('options' => array('regexp' => "/{$regex}/"));
+    }
+
+    public function toArray() {
+        return (array) $this;
     }
 
 }
