@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\FileSystem;
+use App\Models\FileSystemFile;
 
 /**
  * Description of FileSystemController
@@ -127,6 +128,38 @@ class FileSystemController extends ControllerBase {
             $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/', $exc->getMessage());
+        }
+    }
+
+    public function batch() {
+        try {
+            //print_r(sys_get_temp_dir()); die();
+            //phpinfo(); die();
+            /*print_r($_POST); die();
+            $initialParent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]+\-[0-9]+$/")));
+            if (!$initialParent) {
+                die('No parent information');
+                $this->redirect('/filesystem/', 'No parent information');
+                exit();
+            }
+            if ($_FILES['file']['error'] != UPLOAD_ERR_OK || !is_uploaded_file($_FILES['file']['tmp_name'])) {
+                die('There was an error uploading the file');
+                $this->redirect('/filesystem/add/', 'There was an error uploading the file');
+                exit();
+            }*/
+            //$initialParentData = explode('-', $initialParent);
+            //$parentData = array('id' => $initialParentData[0], 'level' => $initialParentData[1] + 1);
+            //$filePath = $_FILES['file']['tmp_name'];
+            /*$filePath = '/Users/oscar/Dev/local.test.com/netpay/_tmp/files.txt';
+            $tree = FileSystem::getTreeFromFile($filePath);
+            print_r($tree); die();
+            $this->redirect('/filesystem/');*/
+            $filePath = '/Users/oscar/Dev/local.test.com/netpay/_tmp/files.txt';
+            $fsf = new FileSystemFile($filePath);
+            $fsf->getTree();
+        } catch (\Exception $exc) {
+            die($exc->getMessage());
+            $this->redirect('/filesystem/add/', $exc->getMessage());
         }
     }
 

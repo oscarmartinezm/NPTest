@@ -17,7 +17,7 @@
                 </div>
                 <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
+                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="form-create">
                             {% if item.id %}
                                 <input name="_method" type="hidden" value="PATCH">
                                 <input type="hidden" name="id" value="{{ item.id }}">
@@ -75,12 +75,12 @@
                 </div>
                 <div id="collapse2" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
+                        <form method="POST" action="index.php?route=/filesystem/update/batch/" accept-charset="UTF-8" class="form bv-form" id="form-batch" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                                     <div class="form-group">
                                         <label>File <span class="required">*</span></label>
-                                        <input type="file" class="form-control-file">
+                                        <input type="file" name="file" class="form-control-file">
                                     </div>
                                 </div>
                             </div>

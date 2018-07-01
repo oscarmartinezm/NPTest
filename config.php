@@ -12,3 +12,4 @@ define('TWIG_CACHE_PATH', false);
 define('TWIG_VIEWS_PATH', __DIR__ . '/src/App/views/');
 
 date_default_timezone_set('America/Costa_Rica');
+ini_set('upload_tmp_dir', __DIR__ . '/_tmp');

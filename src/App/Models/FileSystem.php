@@ -57,10 +57,10 @@ class FileSystem extends ModelBase {
                 ], $this->id);
     }
 
-    public static function delete($id){
+    public static function delete($id) {
         return parent::_delete(self::$TABLE, ['id' => $id]);
     }
-    
+
     public static function find($id) {
         $dbData = parent::_find(self::$TABLE, ['id' => $id]);
         if (count($dbData) < 1) {
@@ -105,6 +105,48 @@ class FileSystem extends ModelBase {
     public static function getFlat($includeFiles = true) {
         $tree = self::getTree($includeFiles, true);
         return self::treeToFlat($tree);
+    }
+
+    public static function getTreeFromFile($filePath) {
+        $file = new \SplFileObject($filePath);
+        $tree = array('type' => 'root', 'children' => []);
+        $dummyArr = [];
+        self::createBranchFromFile($file, $tree, $dummyArr, $tree, -1);
+        return $tree;
+    }
+
+    private static function createBranchFromFile(&$file, &$parent, &$lastItem, &$root, $lastLevel) {
+        if ($file->eof()) {
+            return null;
+        }
+        $line = $file->fgets();
+        $name = trim($line);
+        if (empty($name)) {
+            return null;
+        }
+        $level = (strspn($line, ' ') / 4);
+        $newItem = array(
+            'name' => $name,
+            'level' => $level,
+            'type' => 'NIVEL 0',
+            'children' => []
+        );
+        if ($level == 0) {
+            $lastItem['type'] = 'NIVEL 1';
+            $root[] = $newItem;
+            $index = count($root) - 1;
+            self::createBranchFromFile($file, $root, $root[$index], $root, 0);
+        } elseif ($level == $lastLevel) {
+            $lastItem['type'] = 'NIVEL 3';
+            $lastItem['children'][] = $newItem;
+            $index = count($parent) - 1;
+            self::createBranchFromFile($file, $parent['children'], $parent[$index], $root, $level);
+        } else {
+            $lastItem['type'] = 'NIVEL 2';
+            $parent['children'][] = $newItem;
+            $index = count($parent['children']) - 1;
+            self::createBranchFromFile($file, $parent[$index]['children'], $parent[$index]['children'], $root, $level);
+        }
     }
 
     private static function createBranchArr(&$parents, $children) {

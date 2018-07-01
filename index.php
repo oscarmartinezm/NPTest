@@ -13,6 +13,9 @@ switch (true) {
     case $route == '/filesystem/add/':
         FileSystemController::get()->create();
         break;
+    case $route == '/filesystem/update/batch/':
+        FileSystemController::get()->batch();
+        break;
     case preg_match('/^\/filesystem\/update\/[0-9]+\/$/', $route):
         $id = explode('/', $route)[3];
         FileSystemController::get()->edit($id);
