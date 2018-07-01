@@ -1,5 +1,5 @@
 Helpers = {
-    dataTable: function (selector, noOrderableCols, addColumnSearch, columnOrder, paging, searching) {
+    dataTable: function (selector, noOrderableCols, addColumnSearch, columnOrder, paging, searching, noSearchableCols) {
         var ordering;
         if (columnOrder === false) {
             ordering = false;
@@ -14,6 +14,12 @@ Helpers = {
         }
         if (searching !== false) {
             searching = true;
+        }
+        if (!noOrderableCols) {
+            noSearchableCols = []
+        }
+        if (!noSearchableCols) {
+            noSearchableCols = []
         }
         if (addColumnSearch) {
             var thead = $(selector + ' thead tr').clone();
@@ -32,7 +38,8 @@ Helpers = {
             ordering: ordering,
             paging: paging,
             searching: searching,
-            columnDefs: [{"targets": noOrderableCols, "orderable": false}]
+            columnDefs: [{targets: noOrderableCols, orderable: false}, {targets: noSearchableCols, searchable: false}],
+            oSearch: {bSmart: false, bRegex: true, sSearch: '', bCaseInsensitive: true}
         };
         if (addColumnSearch && !searching) {
             options['searching'] = true;

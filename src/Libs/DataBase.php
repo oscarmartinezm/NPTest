@@ -341,6 +341,25 @@ class DataBase {
     }
 
     /**
+     * Get the first row
+     * @param  string   $query  the query to be executed
+     * @return array
+     */
+    public function queryFirst($query) {
+        $result = $this->connection->query($query, MYSQLI_USE_RESULT);
+        if (!$result) {
+            throw new \Exception($this->errorMessage('Invalid query: ', $query));
+        }
+        $row = $result->fetch_row();
+        if(!$row){
+            $firstRow = [];
+        } else {
+            $firstRow = $row;
+        }
+        return $firstRow;
+    }
+    
+    /**
      * Load the values result of a query
      * @param  array   $result  result of the query execution
      * @return array

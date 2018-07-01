@@ -168,27 +168,36 @@ table.result-list tr td {
 }
 /* END LIST PAGES SECTION */
 
-#filesystem-table tr td:nth-child(1){
-    width: 50px;
+#filesystem-table tr td:nth-child(1), #filesystem-table tr th:nth-child(1){
+    max-width: 40px;
 }
 
-#filesystem-table tr td:nth-child(2){
+#filesystem-table tr td:nth-child(2), #filesystem-table tr th:nth-child(2){
+    max-width: 250px;
 }
 
-#filesystem-table tr td:nth-child(3){
-    width: 100px;
+#filesystem-table tr td:nth-child(3), #filesystem-table tr th:nth-child(3){
+    max-width: 100px;
 }
 
 #filesystem-table tr td:nth-child(4), #filesystem-table tr th:nth-child(4){
-    width: 100px;
-    text-align: center;
+    /*display: none;*/
 }
 
 #filesystem-table tr td:nth-child(5), #filesystem-table tr th:nth-child(5){
-    width: 100px;
+    max-width: 50px;
+    text-align: center;
+}
+
+#filesystem-table tr td:nth-child(6), #filesystem-table tr th:nth-child(6){
+    max-width: 50px;
     text-align: center;
 }
 
 span.required {
     color: red;
+}
+
+footer {
+    margin-top: 2em;
 }

@@ -6,7 +6,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        <a {% if not item.id %}data-toggle="collapse"{% endif %} data-parent="#accordion" href="#collapse1">
                             {% if item.id %}
                                 <h4 style="margin: 10px 0;">Edit {{ item.type }}</h4>
                             {% else %}
@@ -65,47 +65,49 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                            <h4>Upload filesystem structure from text file</h4>
-                        </a>
+            {% if not item.id %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                <h4>Upload filesystem structure from text file</h4>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <form method="POST" action="index.php?route=/filesystem/update/batch/" accept-charset="UTF-8" class="form bv-form" id="form-batch" enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                                    <div class="form-group">
-                                        <label>File <span class="required">*</span></label>
-                                        <input type="file" name="file" class="form-control-file">
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form method="POST" action="index.php?route=/filesystem/update/batch/" accept-charset="UTF-8" class="form bv-form" id="form-batch" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                        <div class="form-group">
+                                            <label>File <span class="required">*</span></label>
+                                            <input type="file" name="file" class="form-control-file">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8 col-md-offset-2">
-                                    <div class="form-group">
-                                        <label for="parent">Parent <span class="required">*</span></label>
-                                        <select name="parent" data-value="{{ item.level_id }}" class="form-control selectpicker show-tick" data-live-search="true">
-                                            <option value="0-0">/</option>
-                                            {% for directory in directories %}
-                                                <option value="{{ directory.id }}-{{ directory.level }}">{{ directory.level_name|raw }}</option>
-                                            {% endfor %}
-                                        </select>
+                                <div class="row">
+                                    <div class="col-md-8 col-md-offset-2">
+                                        <div class="form-group">
+                                            <label for="parent">Parent <span class="required">*</span></label>
+                                            <select name="parent" data-value="{{ item.level_id }}" class="form-control selectpicker show-tick" data-live-search="true">
+                                                <option value="0-0">/</option>
+                                                {% for directory in directories %}
+                                                    <option value="{{ directory.id }}-{{ directory.level }}">{{ directory.level_name|raw }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                                    <input class="btn btn-primary  pull-right" type="submit" value="Save"/>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                        <input class="btn btn-primary  pull-right" type="submit" value="Save"/>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div class="row">
             <div class="col-md-12">
