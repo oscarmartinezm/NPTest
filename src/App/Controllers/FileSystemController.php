@@ -138,8 +138,9 @@ class FileSystemController extends ControllerBase {
                 exit();
             }
             $filePath = $_FILES['file']['tmp_name'];
+            $truncate = filter_input(INPUT_POST, 'truncate');
             $initialParentData = explode('-', $initialParent);
-            FileSystem::saveFromFile($filePath, $initialParentData[0], $initialParentData[1] + 1);
+            FileSystem::saveFromFile($filePath, $initialParentData[0], $initialParentData[1] + 1, $truncate);
             $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/add/', $exc->getMessage());

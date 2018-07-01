@@ -17,7 +17,7 @@
                 </div>
                 <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="form-create">
+                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="form-item">
                             {% if item.id %}
                                 <input name="_method" type="hidden" value="PATCH">
                                 <input type="hidden" name="id" value="{{ item.id }}">
@@ -80,6 +80,19 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-md-8 col-md-offset-2">
                                         <div class="form-group">
+                                            <label>Remove previous data</label>
+                                            <div class="checkbox checkbox-primary">
+                                                <label>
+                                                    <input type="checkbox" name="truncate" value="1" />
+                                                    <span>&nbsp;</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                        <div class="form-group">
                                             <label>File <span class="required">*</span></label>
                                             <input type="file" name="file" class="form-control-file">
                                         </div>
@@ -120,7 +133,6 @@
 {% block scripts %}
     <script>
         $('form [data-value]').each(function () {
-            console.log(this);
             var ele = $(this);
             if (ele.is(':checkbox') || ele.is(':radio')) {
                 if (ele.val() == ele.attr('data-value')) {
@@ -132,5 +144,60 @@
                 ele.val(ele.attr('data-value'));
             }
         });
+        $('#form-batch input[name="truncate"]').change(function(){
+            var select = $('#form-batch select[name="parent"]');
+            if(this.checked){
+                select.val('0-0');
+                select.parents('.form-group').hide();
+            } else {
+                select.parents('.form-group').show();
+            }
+        });
+        var itemFields = {
+            name: {
+                validators: {
+                    notEmpty: {
+                        message: "Name is required"
+                    },
+                    stringLength: {
+                        min: 5,
+                        max: 60,
+                        message: 'The name must have from 5 to 60 char size'
+                    }
+                }
+            },
+            type: {
+                validators: {
+                    notEmpty: {
+                        message: "Type is required"
+                    }
+                }
+            },
+            parent: {
+                validators: {
+                    notEmpty: {
+                        message: "Parent is required"
+                    }
+                }
+            },
+        };
+        var batchFields = {
+            file: {
+                validators: {
+                    notEmpty: {
+                        message: "File is required"
+                    }
+                }
+            },
+            parent: {
+                validators: {
+                    notEmpty: {
+                        message: "Parent is required"
+                    }
+                }
+            },
+        };
+        Helpers.validator('#form-item', itemFields);
+        Helpers.validator('#form-batch', batchFields);
     </script>
 {% endblock %}

@@ -201,3 +201,11 @@ span.required {
 footer {
     margin-top: 2em;
 }
+
+.header-logo {
+    height: 50px;
+}
+
+.checkbox {
+    padding-left: 25px;
+}

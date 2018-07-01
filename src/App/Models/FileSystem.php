@@ -129,8 +129,10 @@ class FileSystem extends ModelBase {
         return self::treeToFlat($tree);
     }
 
-    public static function saveFromFile($filePath, $parentId, $initialLevel) {
-        self::db()->execute('TRUNCATE ' . self::$TABLE);
+    public static function saveFromFile($filePath, $parentId, $initialLevel, $truncate = false) {
+        if($truncate){
+            self::db()->execute('TRUNCATE ' . self::$TABLE);
+        }
         $tree = FileSystemTree::get()->fromFile($filePath);
         self::saveFromFileTree($tree, $parentId, $initialLevel);
     }
