@@ -37,6 +37,8 @@ class FileSystemFile {
             foreach ($arrLevels[$i] as $nLine){
                 $parent = $this->searchParent($nLine, $arrLevels[$i - 1]);
                 $arrItems[$nLine]['parent'] = $parent;
+                $arrItems[$parent]['children'][] = $arrItems[$nLine];
+                unset($arrItems[$nLine]);
             }
         }
         print_r($arrItems); 
@@ -66,7 +68,7 @@ class FileSystemFile {
             'name' => $name,
             'level' => $level,
             'type' => 'ERROR',
-            'children' => []
+            'parent' => 0
         );
         return $newItem;
     }
