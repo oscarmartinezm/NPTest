@@ -103,7 +103,7 @@ class FileSystemController extends ControllerBase {
             $model = FileSystem::find($id);
             $model->name = filter_input(INPUT_POST, 'name');
             $model->type = filter_input(INPUT_POST, 'type');
-            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]\-[0-9]$/")));
+            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]+\-[0-9]+$/")));
             if ($parent) {
                 $parentSplit = explode('-', $parent);
                 $model->parent = $parentSplit[0];
@@ -112,7 +112,7 @@ class FileSystemController extends ControllerBase {
             $model->save();
             $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/add/', $exc->getMessage());
+            $this->redirect("/filesystem/update/{$id}/", $exc->getMessage());
         }
     }
 
@@ -120,10 +120,14 @@ class FileSystemController extends ControllerBase {
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        
+        try {
+            FileSystem::delete($id);
+            $this->redirect('/filesystem/');
+        } catch (\Exception $exc) {
+            $this->redirect('/filesystem/', $exc->getMessage());
+        }
     }
 
     public static function get() {

@@ -17,17 +17,25 @@ switch (true) {
         $id = explode('/', $route)[3];
         FileSystemController::get()->edit($id);
         break;
-    case $route == '/filesystem/save/':
+    case preg_match('/^\/filesystem\/[0-9]+\/$/', $route):
         $method = filter_input(INPUT_POST, '_method');
-        if ($method === 'POST') {
-            FileSystemController::get()->store();
-        } elseif ($method === 'PATCH') {
-            $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-            FileSystemController::get()->update($id);
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        switch ($method) {
+            case 'POST':
+                FileSystemController::get()->store();
+                break;
+            case 'PATCH':
+                FileSystemController::get()->update($id);
+                break;
+            case 'DELETE':
+                FileSystemController::get()->destroy($id);
+                break;
+            default:
+                break;
         }
         break;
     default:
-        FileSystemController::get()->index();
+        FileSystemController::get()->redirect('/filesystem/');
         break;
 }
 

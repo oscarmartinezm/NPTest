@@ -37,10 +37,10 @@ class FileSystem extends ModelBase {
         $filesystem->id = $dbData['id'];
         $filesystem->name = $dbData['name'];
         $filesystem->type = $dbData['type'];
-        $filesystem->parent = $dbData['parent'];
+        $filesystem->parent = $dbData['parent'] || 0;
         $filesystem->level = (int) $dbData['level'];
         $filesystem->level_id = $filesystem->parent . '-' . ($filesystem->level - 1);
-        $filesystem->level_name = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $filesystem->level) . $filesystem->name;
+        $filesystem->level_name = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($filesystem->level) - 1) . $filesystem->name;
         return $filesystem;
     }
 
@@ -52,11 +52,15 @@ class FileSystem extends ModelBase {
         $this->_save(self::$TABLE, [
             'name' => $this->name,
             'type' => $this->type,
-            'parent' => $this->parent,
+            'parent' => ($this->parent == 0) ? null : $this->parent,
             'level' => $this->level
                 ], $this->id);
     }
 
+    public static function delete($id){
+        return parent::_delete(self::$TABLE, ['id' => $id]);
+    }
+    
     public static function find($id) {
         $dbData = parent::_find(self::$TABLE, ['id' => $id]);
         if (count($dbData) < 1) {
@@ -79,8 +83,10 @@ class FileSystem extends ModelBase {
     }
 
     public static function getTree($includeFiles = true, $asArray = false) {
-        $filters = !($includeFiles) ? ['type' => self::TYPE_DIRECTORY] : [];
-        $data = parent::_find(self::$TABLE, $filters, ['parent', 'level', 'name']);
+        $typeDirectory = self::TYPE_DIRECTORY;
+        $where = !($includeFiles) ? "WHERE type = '{$typeDirectory}' " : '';
+        $sql = "SELECT id, name, type, IFNULL(parent, 0) as parent, level FROM filesystem {$where};";
+        $data = self::query($sql);
         if (empty($data)) {
             return array();
         }

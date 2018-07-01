@@ -2,32 +2,22 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                {% if _error_ %}
-                    <div class="alert alert-danger fade in alert-dismissible">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                        {{ _error_  }}
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                            {% if item.id %}
+                                <h4 style="margin: 10px 0;">Edit {{ item.type }}</h4>
+                            {% else %}
+                                <h4 cstyle="margin: 10px 0;">Create new File or Directory</h4>
+                            {% endif %}
+                        </a>
                     </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-md-12">
-                                {% if meal.id %}
-                                    <h3 style="margin: 10px 0;">Edit</h3>
-                                {% else %}
-                                    <h3 cstyle="margin: 10px 0;">Create new File or Directory</h3>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <form method="POST" action="index.php?route=/filesystem/save/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
+                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
                             {% if item.id %}
                                 <input name="_method" type="hidden" value="PATCH">
                                 <input type="hidden" name="id" value="{{ item.id }}">
@@ -52,7 +42,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>   
+                            </div>
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div class="form-group">
@@ -69,12 +59,57 @@
                             <div class="row">
                                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                                     <input class="btn btn-primary  pull-right" type="submit" value="Save"/>
-                                    <a href="index.php?route=/filesystem/" class="btn btn-default btn-md pull-right" style="margin-right: 10px;">Cancel</a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                            <h4>Upload filesystem structure from text file</h4>
+                        </a>
+                    </div>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <form method="POST" action="index.php?route=/filesystem/{{ item.id ? item.id  : 0 }}/" accept-charset="UTF-8" class="form bv-form" id="meal-form">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label>File <span class="required">*</span></label>
+                                        <input type="file" class="form-control-file">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label for="parent">Parent <span class="required">*</span></label>
+                                        <select name="parent" data-value="{{ item.level_id }}" class="form-control selectpicker show-tick" data-live-search="true">
+                                            <option value="0-0">/</option>
+                                            {% for directory in directories %}
+                                                <option value="{{ directory.id }}-{{ directory.level }}">{{ directory.level_name|raw }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <input class="btn btn-primary  pull-right" type="submit" value="Save"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a href="index.php?route=/filesystem/" class="btn btn-info btn-md pull-right" style="margin-right: 10px; width: 200px">Back</a>
             </div>
         </div>
     </div>

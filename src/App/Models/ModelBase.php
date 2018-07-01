@@ -25,6 +25,10 @@ class ModelBase {
         }
     }
 
+    protected static function query($sql) {
+        return self::db()->query($sql);
+    }
+    
     protected function insert($table, $data) {
         $data['insert_on'] = date('Y-m-d H:i:s');
         $data['update_on'] = date('Y-m-d H:i:s');
@@ -40,6 +44,12 @@ class ModelBase {
         self::db()->execute($sql, array_merge($values, $valuesFilters));
     }
 
+    protected static function _delete($table, $filters) {
+        $valuesFilters = array_values($filters);
+        $sql = self::createDelete($table, array_keys($filters));
+        self::db()->execute($sql, $valuesFilters);
+    }
+    
     protected static function _find($table, $filters, $orderBy = array('id')) {
         $valuesFilters = array_values($filters);
         $selectSQL = self::createSelect($table, array_keys($filters), $orderBy);
@@ -72,6 +82,15 @@ class ModelBase {
         $columnsStr = join(' = ?, ', $columns) . " = ?";
         $filtersStr = join(' = ? AND ', $filtersColumns) . ' = ?';
         $sql = "UPDATE $table SET $columnsStr WHERE $filtersStr;";
+        return $sql;
+    }
+    
+    private static function createDelete($table, $filtersColumns){
+        if (empty($filtersColumns)) {
+            throw new \Exception('Is not possible execute delete on database without any filter');
+        }
+        $filtersStr = join(' = ? AND ', $filtersColumns) . ' = ?';
+        $sql = "DELETE FROM $table WHERE $filtersStr;";
         return $sql;
     }
 

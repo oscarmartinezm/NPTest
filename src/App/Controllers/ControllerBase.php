@@ -33,7 +33,7 @@ class ControllerBase {
         echo $this->twig->render($template . '.twig', $variables);
     }
 
-    protected function redirect($redirectTo, $errorMessage = null) {
+    public function redirect($redirectTo, $errorMessage = null) {
         if (!is_null($errorMessage)) {
             $_SESSION['__error__'] = $errorMessage;
         }
