@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\FileSystemTree;
+
 /**
  * Description of FileSystem
  *
@@ -87,19 +89,7 @@ class FileSystem extends ModelBase {
         $where = !($includeFiles) ? "WHERE type = '{$typeDirectory}' " : '';
         $sql = "SELECT id, name, type, IFNULL(parent, 0) as parent, level FROM filesystem {$where};";
         $data = self::query($sql);
-        if (empty($data)) {
-            return array();
-        }
-        $parents = array();
-        foreach ($data as $item) {
-            $parents[$item['parent']][] = $item;
-        }
-        if ($asArray) {
-            $tree = self::createBranchArr($parents, $parents[0]);
-        } else {
-            $tree = self::createBranchObj($parents, $parents[0]);
-        }
-        return $tree;
+        return FileSystemTree::get()->getTree($data, $asArray);
     }
 
     public static function getFlat($includeFiles = true) {
@@ -107,69 +97,15 @@ class FileSystem extends ModelBase {
         return self::treeToFlat($tree);
     }
 
-    public static function getTreeFromFile($filePath) {
-        $file = new \SplFileObject($filePath);
-        $tree = array('type' => 'root', 'children' => []);
-        $dummyArr = [];
-        self::createBranchFromFile($file, $tree, $dummyArr, $tree, -1);
-        return $tree;
+    public static function saveFromFile($filePath) {
+        $tree = FileSystemTree::get()->fromFile($filePath);
+        print_r($tree); die();
     }
-
-    private static function createBranchFromFile(&$file, &$parent, &$lastItem, &$root, $lastLevel) {
-        if ($file->eof()) {
-            return null;
-        }
-        $line = $file->fgets();
-        $name = trim($line);
-        if (empty($name)) {
-            return null;
-        }
-        $level = (strspn($line, ' ') / 4);
-        $newItem = array(
-            'name' => $name,
-            'level' => $level,
-            'type' => 'NIVEL 0',
-            'children' => []
-        );
-        if ($level == 0) {
-            $lastItem['type'] = 'NIVEL 1';
-            $root[] = $newItem;
-            $index = count($root) - 1;
-            self::createBranchFromFile($file, $root, $root[$index], $root, 0);
-        } elseif ($level == $lastLevel) {
-            $lastItem['type'] = 'NIVEL 3';
-            $lastItem['children'][] = $newItem;
-            $index = count($parent) - 1;
-            self::createBranchFromFile($file, $parent['children'], $parent[$index], $root, $level);
-        } else {
-            $lastItem['type'] = 'NIVEL 2';
-            $parent['children'][] = $newItem;
-            $index = count($parent['children']) - 1;
-            self::createBranchFromFile($file, $parent[$index]['children'], $parent[$index]['children'], $root, $level);
-        }
-    }
-
-    private static function createBranchArr(&$parents, $children) {
-        $tree = array();
-        foreach ($children as $child) {
-            if (isset($parents[$child['id']])) {
-                $child['children'] = self::createBranchArr($parents, $parents[$child['id']]);
-            }
-            $tree[] = $child;
-        }
-        return $tree;
-    }
-
-    private static function createBranchObj(&$parents, $children) {
-        $tree = array();
-        foreach ($children as $child) {
-            $childObj = self::createFromDB($child);
-            if (isset($parents[$child['id']])) {
-                $childObj->children = self::createBranchObj($parents, $parents[$child['id']]);
-            }
-            $tree[] = $childObj;
-        }
-        return $tree;
+    
+    private static function _loopTree($tree) {
+        $fsf = new FileSystemFile($filePath);
+        $tree = $fsf->getTree();
+        print_r($tree); die();
     }
 
     private static function treeToFlat($tree, &$count = 0) {

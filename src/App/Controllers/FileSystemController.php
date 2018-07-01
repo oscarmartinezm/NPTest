@@ -150,13 +150,9 @@ class FileSystemController extends ControllerBase {
             //$initialParentData = explode('-', $initialParent);
             //$parentData = array('id' => $initialParentData[0], 'level' => $initialParentData[1] + 1);
             //$filePath = $_FILES['file']['tmp_name'];
-            /*$filePath = '/Users/oscar/Dev/local.test.com/netpay/_tmp/files.txt';
-            $tree = FileSystem::getTreeFromFile($filePath);
-            print_r($tree); die();
-            $this->redirect('/filesystem/');*/
             $filePath = '/Users/oscar/Dev/local.test.com/netpay/_tmp/files.txt';
-            $fsf = new FileSystemFile($filePath);
-            $fsf->getTree();
+            FileSystem::saveFromFile($filePath);
+            $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
             die($exc->getMessage());
             $this->redirect('/filesystem/add/', $exc->getMessage());
