@@ -34,7 +34,7 @@ class FileSystem extends ModelBase {
         parent::__construct();
     }
 
-    private static function createFromDB($dbData) {
+    protected static function createFromDB($dbData) {
         $filesystem = new FileSystem();
         $filesystem->id = $dbData['id'];
         $filesystem->name = $dbData['name'];
@@ -89,7 +89,7 @@ class FileSystem extends ModelBase {
         $where = !($includeFiles) ? "WHERE type = '{$typeDirectory}' " : '';
         $sql = "SELECT id, name, type, IFNULL(parent, 0) as parent, level FROM filesystem {$where};";
         $data = self::query($sql);
-        return FileSystemTree::get()->getTree($data, $asArray);
+        return FileSystemTree::get()->createTree($data, $asArray);
     }
 
     public static function getFlat($includeFiles = true) {
@@ -97,15 +97,23 @@ class FileSystem extends ModelBase {
         return self::treeToFlat($tree);
     }
 
-    public static function saveFromFile($filePath) {
+    public static function saveFromFile($filePath, $parentId, $initialLevel) {
         $tree = FileSystemTree::get()->fromFile($filePath);
-        print_r($tree); die();
+        self::saveFromFileTree($tree, $parentId, $initialLevel);
     }
-    
-    private static function _loopTree($tree) {
-        $fsf = new FileSystemFile($filePath);
-        $tree = $fsf->getTree();
-        print_r($tree); die();
+
+    private static function saveFromFileTree($tree, $parentId, $initialLevel) {
+        foreach ($tree as $treeItem) {
+            $model = new FileSystem();
+            $model->name = $treeItem['name'];
+            $model->level = ($treeItem['level'] + $initialLevel);
+            $model->parent = $parentId;
+            $model->type = (isset($treeItem['children'])) ? self::TYPE_DIRECTORY : self::TYPE_FILE;
+            $model->save();
+            if ($model->type == self::TYPE_DIRECTORY) {
+                self::saveFromFileTree($treeItem['children'], self::db()->getLastInsertId(), $initialLevel);
+            }
+        }
     }
 
     private static function treeToFlat($tree, &$count = 0) {

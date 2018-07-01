@@ -2,18 +2,20 @@
 
 namespace App\Helpers;
 
+use \App\Models\FileSystem;
+
 /**
  * Description of FileSystemFile
  *
  * @author oscar
  */
-class FileSystemTree {
+class FileSystemTree extends FileSystem {
 
     public function __construct() {
 
     }
 
-    public function getTree($data, $asArray = false) {
+    public function createTree($data, $asArray = false) {
         if (empty($data)) {
             return array();
         }
@@ -75,7 +77,7 @@ class FileSystemTree {
         }
         $level = (strspn($line, ' ') / 4);
         $newItem = array(
-            'id' => $nLine,
+            //'id' => $nLine,
             'name' => $name,
             'level' => $level,
             'parent' => 0
@@ -97,7 +99,7 @@ class FileSystemTree {
     private function createBranchObj(&$parents, $children) {
         $tree = array();
         foreach ($children as $child) {
-            $childObj = self::createFromDB($child);
+            $childObj = FileSystem::createFromDB($child);
             if (isset($parents[$child['id']])) {
                 $childObj->children = $this->createBranchObj($parents, $parents[$child['id']]);
             }

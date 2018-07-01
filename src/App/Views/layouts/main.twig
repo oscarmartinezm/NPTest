@@ -43,8 +43,21 @@
                     </div>
                 </div>
             </nav>
-            <div id="content">{% block content %}{% endblock %}</div>
-        </div>
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% if _error_ %}
+                                <div class="alert alert-danger fade in alert-dismissible">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                    {{ _error_ }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% block content %}{% endblock %}
+            </div>
         <footer>
             <div class="row">
                 <div class="col-sm-12 text-center">
@@ -58,7 +71,7 @@
         <script src="js/bootstrap-select.js"></script>
         <script src="js/bootstrapValidator.js"></script>
         <script src="js/Helpers.js"></script>
-        {% block scripts %}{% endblock %}
-    </body>
+    {% block scripts %}{% endblock %}
+</body>
 </html>
 

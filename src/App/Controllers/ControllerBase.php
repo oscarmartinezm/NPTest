@@ -15,12 +15,11 @@ session_start();
 class ControllerBase {
 
     protected $twig;
-    protected $error = null;
-    protected $success = null;
+    protected static $error = null;
 
     public function __construct() {
         if (isset($_SESSION['__error__'])) {
-            $this->error = $_SESSION['__error__'];
+            self::$error = $_SESSION['__error__'];
             unset($_SESSION['__error__']);
         }
         $loader = new Twig_Loader_Filesystem(TWIG_VIEWS_PATH);
@@ -42,7 +41,7 @@ class ControllerBase {
     }
 
     protected function hasError() {
-        return !is_null($this->error);
+        return !is_null(self::$error);
     }
 
 }
