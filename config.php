@@ -12,6 +12,6 @@ define('DB_SCHEMA', 'netpay');
 define('DB_HOST', '127.0.0.1');
 define('CONTACTS_FILE_PATH', __DIR__ . '/_tmp/contacts.csv');
 define('TWIG_CACHE_PATH', false);
-define('TWIG_VIEWS_PATH', __DIR__ . '/src/App/views/');
+define('TWIG_VIEWS_PATH', __DIR__ . '/src/App/Views/');
 
 
