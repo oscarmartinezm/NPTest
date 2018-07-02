@@ -21,7 +21,7 @@ class FileSystemController extends ControllerBase {
      */
     public function index() {
         $filesystem = FileSystem::getFlat(true);
-        $this->loadView('filesystem/index', ['filesystem' => $filesystem, '_error_' => self::$error]);
+        $this->loadView('filesystem/index', ['filesystem' => $filesystem]);
     }
 
     /**
@@ -31,7 +31,7 @@ class FileSystemController extends ControllerBase {
     public function create() {
         try {
             $directories = FileSystem::getFlat(false);
-            $this->loadView('filesystem/form', ['directories' => $directories, '_error_' => self::$error]);
+            $this->loadView('filesystem/form', ['directories' => $directories]);
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/', $exc->getMessage());
         }
@@ -53,7 +53,7 @@ class FileSystemController extends ControllerBase {
                 $model->level = $parentSplit[1] + 1;
             }
             $model->save();
-            $this->redirect('/filesystem/');
+            $this->redirect('/filesystem/', null, "{$model->type} successfully saved!");
         } catch (\Exception $exc) {
             $this->redirect('/filesystem/add/', $exc->getMessage());
         }
@@ -105,7 +105,7 @@ class FileSystemController extends ControllerBase {
                 $model->level = $parentSplit[1] + 1;
             }
             $model->save();
-            $this->redirect('/filesystem/');
+            $this->redirect('/filesystem/', null, "{$model->type} successfully saved!");
         } catch (\Exception $exc) {
             $this->redirect("/filesystem/update/{$id}/", $exc->getMessage());
         }

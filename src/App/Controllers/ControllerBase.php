@@ -26,7 +26,9 @@ class ControllerBase {
         ));
     }
 
-    protected function loadView($template, $variables) {
+    protected function loadView($template, $variables = []) {
+        $variables['_error_'] = self::$error;
+        $variables['_success_'] = self::$success;
         echo $this->twig->render($template . '.twig', $variables);
     }
 

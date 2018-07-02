@@ -20,9 +20,7 @@ class ContactController extends ControllerBase {
      *
      */
     public function index() {
-        //var_dump(self::$success);
-        print_r($_SESSION);
-        $this->loadView('multicontact_form/index', ['_error_' => self::$error, '_success_' => self::$success]);
+        $this->loadView('multicontact_form/index');
     }
 
     /**
