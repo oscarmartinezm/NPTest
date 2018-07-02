@@ -8,7 +8,7 @@ date_default_timezone_set('America/Costa_Rica');
 
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
-define('DB_SCHEMA', 'paynet');
+define('DB_SCHEMA', 'netpay');
 define('DB_HOST', '127.0.0.1');
 define('CONTACTS_FILE_PATH', __DIR__ . '/_tmp/contacts.csv');
 define('TWIG_CACHE_PATH', false);
