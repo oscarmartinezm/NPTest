@@ -209,3 +209,17 @@ footer {
 .checkbox {
     padding-left: 25px;
 }
+
+#form-template {
+    display: none;
+}
+
+#forms-container form {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#forms-container hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

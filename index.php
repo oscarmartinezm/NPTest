@@ -3,10 +3,14 @@
 require_once 'bootstrap.php';
 
 use App\Controllers\FileSystemController;
+use App\Controllers\ContactController;
 
 $route = filter_input(INPUT_GET, 'route');
 
 switch (true) {
+    case $route == '/multicontact-form/':
+        ContactController::get()->index();
+        break;
     case $route == '/filesystem/':
         FileSystemController::get()->index();
         break;

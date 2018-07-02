@@ -1,0 +1,73 @@
+{% extends "layouts/main.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h4 style="margin: 10px 0;">Multi Contact Form</h4>
+                            </div>
+                            <div class="col-md-1" >
+                                <a href="" class="btn btn-primary btn-md pull-right" id="btn-save" style="margin: 10px 0;">Save</a>
+                            </div>
+                            <div class="col-md-1" >
+                                <a href="" class="btn btn-primary btn-md pull-right" id="btn-validate" style="margin: 10px 0;">Validate</a>
+                            </div>
+                            <div class="col-md-1" >
+                                <a href="" class="btn btn-primary btn-md pull-right" id="btn-add" style="margin: 10px 0;">Add</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="forms-container" class="row">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12" id="form-template">
+            <form method="POST" action="" accept-charset="UTF-8" class="form bv-form">
+                <div class="row">
+                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                        <h4>Contact</h4>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="name">Name <span class="required">*</span></label>
+                            <input type="text" name="name[]" placeholder="Name" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <input type="text" name="email[]" placeholder="Email" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="phone_number">Phone Number <span class="required">*</span></label>
+                            <input type="text" name="phone_number[]" placeholder="Phone Number" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="js/MultiContactForm.js"></script>
+    <script>
+    </script>
+{% endblock %}
