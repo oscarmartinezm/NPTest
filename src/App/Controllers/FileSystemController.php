@@ -46,7 +46,7 @@ class FileSystemController extends ControllerBase {
             $model = new FileSystem();
             $model->name = filter_input(INPUT_POST, 'name');
             $model->type = filter_input(INPUT_POST, 'type');
-            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]\-[0-9]$/")));
+            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[0-9]+\-[0-9]+$/")));
             if ($parent) {
                 $parentSplit = explode('-', $parent);
                 $model->parent = $parentSplit[0];
