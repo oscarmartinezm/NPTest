@@ -58,7 +58,7 @@ class ContactController extends ControllerBase {
                 $this->redirect('/multicontact-form/', "We found some errors in some contacts: $failedContactsStr");
             }
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/add/', $exc->getMessage());
+            $this->redirect('/filesystem/add/', 'Error saving the items');
         }
     }
 
