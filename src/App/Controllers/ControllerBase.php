@@ -16,12 +16,10 @@ class ControllerBase {
 
     protected $twig;
     protected static $error = null;
+    protected static $success = null;
 
     public function __construct() {
-        if (isset($_SESSION['__error__'])) {
-            self::$error = $_SESSION['__error__'];
-            unset($_SESSION['__error__']);
-        }
+        $this->checkMessages();
         $loader = new Twig_Loader_Filesystem(TWIG_VIEWS_PATH);
         $this->twig = new Twig_Environment($loader, array(
             'cache' => TWIG_CACHE_PATH,
@@ -32,9 +30,12 @@ class ControllerBase {
         echo $this->twig->render($template . '.twig', $variables);
     }
 
-    public function redirect($redirectTo, $errorMessage = null) {
+    public function redirect($redirectTo, $errorMessage = null, $successMessage = null) {
         if (!is_null($errorMessage)) {
             $_SESSION['__error__'] = $errorMessage;
+        }
+        if (!is_null($successMessage)) {
+            $_SESSION['__success__'] = $successMessage;
         }
         header("Location:index.php?route={$redirectTo}");
         exit();
@@ -42,6 +43,17 @@ class ControllerBase {
 
     protected function hasError() {
         return !is_null(self::$error);
+    }
+    
+    private function checkMessages(){
+        if (isset($_SESSION['__error__'])) {
+            self::$error = $_SESSION['__error__'];
+            unset($_SESSION['__error__']);
+        }
+        if (isset($_SESSION['__success__'])) {
+            self::$success = $_SESSION['__success__'];
+            unset($_SESSION['__success__']);
+        }
     }
 
 }

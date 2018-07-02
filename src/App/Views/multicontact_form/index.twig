@@ -29,6 +29,7 @@
                 </div>
             </div>
         </div>
+        <!-- Form items template -->
         <div class="col-md-6 col-sm-12" id="form-template">
             <div class="row">
                 <div class="col-xs-12 col-md-8 col-md-offset-2">
@@ -47,7 +48,7 @@
                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <label for="name">Name <span class="required">*</span></label>
-                        <input type="text" name="name[]" placeholder="Name" class="form-control" value="Oscar Martinez" />
+                        <input type="text" name="name[]" placeholder="Name" class="form-control" value="" />
                     </div>
                 </div>
             </div>
@@ -55,7 +56,7 @@
                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <label for="email">Email <span class="required">*</span></label>
-                        <input type="text" name="email[]" placeholder="Email" class="form-control" value="oscar@abc.com" />
+                        <input type="text" name="email[]" placeholder="Email" class="form-control" value="" />
                     </div>
                 </div>
             </div>
@@ -63,12 +64,30 @@
                 <div class="col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <label for="phone_number">Phone Number <span class="required">*</span></label>
-                        <input type="text" name="phone_number[]" placeholder="Phone Number" class="form-control" value="11111111" />
+                        <input type="text" name="phone_number[]" placeholder="Phone Number" class="form-control" value="" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Validation error modal -->
+    <div id="validation-errors-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Validation error</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Please fix the inputs error before submit</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}

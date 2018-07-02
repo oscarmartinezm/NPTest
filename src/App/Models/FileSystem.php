@@ -112,10 +112,6 @@ class FileSystem extends ModelBase {
         return $result;
     }
 
-    public static function search() {
-        
-    }
-
     public static function getTree($includeFiles = true, $asArray = false) {
         $typeDirectory = self::TYPE_DIRECTORY;
         $where = !($includeFiles) ? "WHERE type = '{$typeDirectory}' " : '';

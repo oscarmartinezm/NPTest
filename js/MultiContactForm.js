@@ -72,12 +72,16 @@ MultiContactForm = {
         contactForm.add();
         MultiContactForm.instances[contactForm.id] = contactForm;
     },
-    validate: function () {
-        $('#main-form').bootstrapValidator('validate');
-    },
     save: function () {
-        MultiContactForm.validate();
-        $('#main-form')[0].submit();
+        if(MultiContactForm.validate()){
+            $('#main-form')[0].submit();
+        } else {
+            $('#validation-errors-modal').modal('show');
+        }
+    },
+    validate: function () {
+        var result = $('#main-form').bootstrapValidator('validate').has('.has-error').length;
+        return (result > 0 ? false : true);
     },
     destroyValidation: function(){
         $('#main-form').bootstrapValidator('destroy');
