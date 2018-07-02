@@ -11,6 +11,9 @@ switch (true) {
     case $route == '/multicontact-form/':
         ContactController::get()->index();
         break;
+    case $route == '/multicontact-form/save/':
+        ContactController::get()->save();
+        break;
     case $route == '/filesystem/':
         FileSystemController::get()->index();
         break;

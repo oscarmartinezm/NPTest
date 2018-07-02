@@ -22,46 +22,51 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div id="forms-container" class="row">
-                            
-                        </div>
+                        <form method="POST" action="index.php?route=/multicontact-form/save/" id="main-form" accept-charset="UTF-8" class="form bv-form">
+                            <div id="forms-container" class="row"></div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-12" id="form-template">
-            <form method="POST" action="" accept-charset="UTF-8" class="form bv-form">
-                <div class="row">
-                    <div class="col-xs-12 col-md-8 col-md-offset-2">
-                        <h4>Contact</h4>
-                        <hr/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-8 col-md-offset-2">
-                        <div class="form-group">
-                            <label for="name">Name <span class="required">*</span></label>
-                            <input type="text" name="name[]" placeholder="Name" class="form-control" />
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Contact</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="" class="btn btn-danger btn-md pull-right btn-delete" style="margin: 10px 0;">Remove</a>
                         </div>
                     </div>
+                    <hr/>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-8 col-md-offset-2">
-                        <div class="form-group">
-                            <label for="email">Email <span class="required">*</span></label>
-                            <input type="text" name="email[]" placeholder="Email" class="form-control" />
-                        </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="name">Name <span class="required">*</span></label>
+                        <input type="text" name="name[]" placeholder="Name" class="form-control" value="Oscar Martinez" />
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <div class="form-group">
-                            <label for="phone_number">Phone Number <span class="required">*</span></label>
-                            <input type="text" name="phone_number[]" placeholder="Phone Number" class="form-control" />
-                        </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="text" name="email[]" placeholder="Email" class="form-control" value="oscar@abc.com" />
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number <span class="required">*</span></label>
+                        <input type="text" name="phone_number[]" placeholder="Phone Number" class="form-control" value="11111111" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

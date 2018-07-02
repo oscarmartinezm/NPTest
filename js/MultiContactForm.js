@@ -2,7 +2,7 @@
 
 MultiContactForm = {
 
-    forms: [],
+    instances: [],
     validator: {
         'name[]': {
             validators: {
@@ -69,36 +69,66 @@ MultiContactForm = {
     },
     add: function () {
         var contactForm = new ContactForm();
-        var form = $('#form-template').clone();
-        form.removeAttr('id');
-        form.attr('data-id', contactForm.id);
-        contactForm.ele = form;
-        MultiContactForm.forms[contactForm.id] = contactForm;
-        form.appendTo('#forms-container');
-        Helpers.validator('div[data-id="' + contactForm.id + '"] form', MultiContactForm.validator);
+        contactForm.add();
+        MultiContactForm.instances[contactForm.id] = contactForm;
     },
     validate: function () {
-        $('#forms-container form').bootstrapValidator('validate');
+        $('#main-form').bootstrapValidator('validate');
     },
     save: function () {
-        
+        MultiContactForm.validate();
+        $('#main-form')[0].submit();
+    },
+    destroyValidation: function(){
+        $('#main-form').bootstrapValidator('destroy');
+    },
+    initValidation: function(){
+        Helpers.validator('#main-form', MultiContactForm.validator);
     }
-
 };
 
 function ContactForm() {
 
     var self = this;
     this.id = null;
-    this.ele = null;
 
     __construct = function () {
         self.id = Helpers.createUUID();
     };
 
+    this.add = function () {
+        var form = $('#form-template').clone();
+        form.removeAttr('id');
+        form.attr('data-formid', self.id);
+        $('.btn-delete', form).click(function(ev){
+            ev.preventDefault();
+            self.remove();
+        });
+        form.appendTo('#forms-container');
+        checkDeleteButtons();
+        MultiContactForm.destroyValidation();
+        MultiContactForm.initValidation();
+    };
+
+    this.remove = function () {
+        MultiContactForm.destroyValidation();
+        $('div[data-formid="' + self.id + '"]').remove();
+        checkDeleteButtons();
+        MultiContactForm.initValidation();
+    };
+    
+    checkDeleteButtons = function(){
+        var deleteBtns = $('#main-form .btn-delete');
+        //console.log(deleteBtns.get(0));
+        if(deleteBtns.length < 2){
+            deleteBtns.addClass('delete-button-hidden');
+        } else {
+            deleteBtns.removeClass('delete-button-hidden');
+        }
+    };
+
     __construct();
 
 }
-;
 
 $(MultiContactForm.init);

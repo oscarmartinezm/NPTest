@@ -223,3 +223,12 @@ footer {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.btn-delete {
+    margin: 0 !important;
+}
+
+.delete-button-hidden {
+    visibility: hidden;
+    pointer-events: none;
+}

@@ -20,8 +20,15 @@ class ContactController extends ControllerBase {
      *
      */
     public function index() {
-        //$filesystem = FileSystem::getFlat(true);
         $this->loadView('multicontact_form/index', ['_error_' => self::$error]);
+    }
+    
+    /**
+     * Display a listing of the resource.
+     *
+     */
+    public function save() {
+        print_r($_POST); die();
     }
     
     public static function get() {
