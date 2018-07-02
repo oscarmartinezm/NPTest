@@ -33,7 +33,7 @@ class FileSystemController extends ControllerBase {
             $directories = FileSystem::getFlat(false);
             $this->loadView('filesystem/form', ['directories' => $directories]);
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/', $exc->getMessage());
+            $this->redirect('/filesystem/', 'Error loading the page');
         }
     }
 
@@ -55,7 +55,7 @@ class FileSystemController extends ControllerBase {
             $model->save();
             $this->redirect('/filesystem/', null, "{$model->type} successfully saved!");
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/add/', $exc->getMessage());
+            $this->redirect('/filesystem/add/', 'Error saving the item');
         }
     }
 
@@ -69,7 +69,7 @@ class FileSystemController extends ControllerBase {
             $model = FileSystem::find($id);
             $this->loadView('filesystem/form', ['item' => $model, '_error_' => self::$error]);
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/', $exc->getMessage());
+            $this->redirect('/filesystem/', 'Error loading the page');
         }
     }
 
@@ -84,7 +84,7 @@ class FileSystemController extends ControllerBase {
             $directories = FileSystem::getFlat(false);
             $this->loadView('filesystem/form', ['directories' => $directories, 'item' => $model, '_error_' => self::$error]);
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/', $exc->getMessage());
+            $this->redirect('/filesystem/', 'Error loading the page');
         }
     }
 
@@ -107,7 +107,7 @@ class FileSystemController extends ControllerBase {
             $model->save();
             $this->redirect('/filesystem/', null, "{$model->type} successfully saved!");
         } catch (\Exception $exc) {
-            $this->redirect("/filesystem/update/{$id}/", $exc->getMessage());
+            $this->redirect("/filesystem/update/{$id}/", 'Error saving the item');
         }
     }
 
@@ -121,7 +121,7 @@ class FileSystemController extends ControllerBase {
             FileSystem::delete($id);
             $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/', $exc->getMessage());
+            $this->redirect('/filesystem/', 'Error removing the item');
         }
     }
 
@@ -142,7 +142,7 @@ class FileSystemController extends ControllerBase {
             FileSystem::saveFromFile($filePath, $initialParentData[0], $initialParentData[1] + 1, $truncate);
             $this->redirect('/filesystem/');
         } catch (\Exception $exc) {
-            $this->redirect('/filesystem/add/', $exc->getMessage());
+            $this->redirect('/filesystem/add/', 'Error saving the items');
         }
     }
 
